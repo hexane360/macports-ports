@@ -6,7 +6,7 @@ PortGroup           compiler_blacklist_versions 1.0
 
 name                vte
 version             0.56.4
-revision            1
+revision            2
 set branch          [join [lrange [split $version .] 0 1] .]
 maintainers         {devans @dbevans} openmaintainer
 categories          gnome
@@ -48,6 +48,11 @@ gobject_introspection yes
 patchfiles          patch-src-pty.cc.diff \
                     patch-src-vteutils.cc.diff \
                     patch-vte-gsize.diff
+
+# fix atomic intrinsics on Ventura and above
+if {[vercmp ${macos_version} 13.0] >= 0} {
+    patchfiles-append patch-src-vtetypebuiltins.cc.template.diff
+}
 
 # reconfigure using upstream autogen.sh for intltool 0.51 compatibility
 
